@@ -24,18 +24,18 @@ Figure::Figure() {
 
 Figure::Figure(FigureType type, Point* points) {
 	this->type = type;
-	for (int i = 0; i < 4; i++) {
-		this->apex[i] = points[i];
+	if (type == rectangle) {
+		this->apex[0] = points[0]; //левый верхний
+		this->apex[1] = { points[1].x, points[0].y }; //правый верхний
+		this->apex[2] = { points[1].x, points[1].y }; //правый нижний
+		this->apex[3] = { points[0].x, points[1].y }; //левый нижний
+	}
+	else {
+		for (int i = 0; i < 4; i++) {
+			this->apex[i] = points[i];
+		}
 	}
 }
-Figure::Figure(Point* points) {
-	this->type = rectangle;
-	this->apex[0] = points[0];
-	this->apex[1] = { points[1].x, points[0].y };
-	this->apex[2] = { points[1].x, points[1].y };
-	this->apex[3] = { points[0].x, points[0].y };
-}
-
 
 
 void Figure::create_ellipse(float* ellipse_points) {
