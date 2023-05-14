@@ -1,28 +1,27 @@
 #pragma once
 
-namespace kos { //объ€вление пространства имЄн
-	enum FigureType { //перечисление доступных фигур
+namespace kos { 
+	enum FigureType { 
 		ellipse,
 		trapezoid,
 		rectangle
 	};
-	struct Point { //структура поинт, с пол€ми х и у, метод len
+	struct Point { 
 		float x;
 		float y;
-		float p_len(Point point); //метод, принимает тип поинт на вход
+		float p_len(Point point); 
 	};
-	class Figure { //класс, на практике ничем не отличаетс€ от структур
+	class Figure { 
 	private:
-		FigureType type; //тип фигуры
-		Point apex[4]; //массив типа поинт из 4 элементов по имени апекс
+		FigureType type; 
+		Point apex[4]; 
 	public:
-		Figure(); //конструктор по умолчанию (без параметров)
-		Figure(FigureType type, Point* points); //конструктор с параметрами
-		Figure(Point* points);
-		void create_ellipse(float* ellipse_points); //методы
+		Figure(); 
+		Figure(FigureType type, Point* points); 
+		void create_ellipse(float* ellipse_points); 
 		void create_rectangle(float* rectangle_points);
 		void create_trapezoid(float* trapezoid_points);
-		bool operator== (const Figure figure) const; //???
+		bool operator== (const Figure figure) const;
 		FigureType get_type();
 		float get_point(char a, int i);
 		void set_type(FigureType Type);
@@ -33,11 +32,11 @@ namespace kos { //объ€вление пространства имЄн
 	};
 	class FigureList { 
 	private:
-		const static int capacity = 3; //вместимость
-		Figure figures[capacity]; //массив
-		int count = 0; //число
+		const static int capacity = 3; 
+		Figure figures[capacity]; 
+		int count = 0; //???
 	public:
-		Figure operator[](const int index) const; //индексатор дл€ работы с экземпл€ром класса как с массивом
+		Figure operator[](const int index) const; //индексатор
 		void figure_add(Figure figure);
 		Figure indexed_get(int index);
 		int get_count();

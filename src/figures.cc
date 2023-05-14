@@ -4,14 +4,14 @@
 #include<stdexcept>
 #include<iostream>
 
-#define MAX(x,y) (x) > (y) ? (x) : (y) //функция принимающая на вход х и у, условие ? тру:фолс (тернарная)
-#define MIN(x,y) (x) > (y) ? (y) : (x) //функция принимающая на вход х и у, условие ? тру:фолс
+#define MAX(x,y) (x) > (y) ? (x) : (y) 
+#define MIN(x,y) (x) > (y) ? (y) : (x) 
 
-using namespace kos; //подключение библиотек
+using namespace kos; 
 
-using namespace std; //подключение библиотек
+using namespace std; 
 
-float Point::p_len(Point point) { //функция поинт
+float Point::p_len(Point point) { 
 	return sqrt( pow( this->x - point.x, 2 ) + pow( this->y - point.y , 2 ) );
 }
 
@@ -25,10 +25,10 @@ Figure::Figure() {
 Figure::Figure(FigureType type, Point* points) {
 	this->type = type;
 	if (type == rectangle) {
-		this->apex[0] = points[0]; //левый верхний
-		this->apex[1] = { points[1].x, points[0].y }; //правый верхний
-		this->apex[2] = { points[1].x, points[1].y }; //правый нижний
-		this->apex[3] = { points[0].x, points[1].y }; //левый нижний
+		this->apex[0] = points[0]; 
+		this->apex[1] = { points[1].x, points[0].y }; 
+		this->apex[2] = { points[1].x, points[1].y }; 
+		this->apex[3] = { points[0].x, points[1].y }; 
 	}
 	else {
 		for (int i = 0; i < 4; i++) {
@@ -63,7 +63,7 @@ void Figure::create_trapezoid(float* trapezoid_points) {
 	}
 }
 
-bool Figure::operator== (const Figure figure) const { //перегрузка оператора == для сравнения двух элеметов типа фигур, сравнивает покоординатно
+bool Figure::operator== (const Figure figure) const { 
 	if (this->type != figure.type)
 		return false;
 	for (int i = 0; i < 4; i++) {
@@ -73,21 +73,21 @@ bool Figure::operator== (const Figure figure) const { //перегрузка оператора == 
 	return true;
 }
 
-void Figure::set_type(FigureType Type) { //метод-свойство СЕТТЕР
+void Figure::set_type(FigureType Type) { 
 	this->type = Type;
 }
 
-FigureType Figure::get_type() { //метод-свойство ГЕТТЕР
+FigureType Figure::get_type() { 
 	return this->type;
 }
 
-void Figure::set_apex(Point* apex){ //метод-свойство, присваивает поле массив этому массиву
+void Figure::set_apex(Point* apex){ 
 	for (int i = 0; i < 4; i++) {
 		this->apex[i] = apex[i];
 	}
 }
 
-float Figure::get_point(char a, int i) { //метод-свойство
+float Figure::get_point(char a, int i) { 
 	switch (a) {
 	case 'x': return this->apex[i].x;
 	case 'y': return this->apex[i].y;
@@ -96,7 +96,7 @@ float Figure::get_point(char a, int i) { //метод-свойство
 
 float Figure::get_perim() { 
 	float perim = 0;
-	float ose[2];
+	float ose[2]; //полуоси
 	switch(this->type) {
 	case ellipse: 
 		ose[0] = (this->apex[0].p_len(this->apex[2])) / 2;
@@ -160,7 +160,7 @@ void Figure::set_min_framing_rectangle(Figure figure) {
 
 
 
-Figure FigureList::operator[](const int index) const{ //ПЕРЕГРУЗКА ИНДЕКСАТОРА для работы с экземляром как с массивом
+Figure FigureList::operator[](const int index) const{ 
 	if ((index < 0) || (capacity <= index)) {
 		throw out_of_range("[FigureList::operator[]] Index is out of range.");
 	}
