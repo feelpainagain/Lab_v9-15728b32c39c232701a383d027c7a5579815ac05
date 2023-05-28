@@ -33,19 +33,18 @@ namespace kos {
 	};
 	class FigureList { 
 	private:
-		//const static int capacity = 3; 
 		Figure** figures;
-		//int count = 0;
 		int _size = 0;
 	public:
 		FigureList();
 		~FigureList();
-		Figure* operator[](const int index) const; //индексатор
+		Figure* operator[](const int index) const;
 		void figure_add(Figure* figure);
 		Figure* indexed_get(int index);
 		int get_size();
 		void figure_insert(Figure* figure, int index);
 		void indexed_delete(int index);
 		Figure max_square_search();
+		void figure_print();
 	};
 }

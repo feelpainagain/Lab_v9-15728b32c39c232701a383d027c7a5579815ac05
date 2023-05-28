@@ -154,7 +154,7 @@ float Figure::get_square() {
 		Point array2 = { apex[1].x, apex[0].y };
 		Point array3 = { apex[1].x, apex[1].y };
 		int len1 = array1.p_len(array2);
-		int len2 = array2.p_len(array3);;
+		int len2 = array2.p_len(array3);
 		return len1*len2;
 	}
 }
@@ -187,6 +187,8 @@ Figure* FigureList::operator[](const int index) const {
 	}
 	return figures[index];
 }
+
+
 
 int FigureList::get_size() {
 	return _size;
@@ -229,7 +231,7 @@ void FigureList::figure_insert(Figure* figure, int index) {
 
 void FigureList::indexed_delete(int index) {
 	if ((index < 0) || (index > _size)) {
-		throw runtime_error("Runtime_error_Kosenko");
+		throw runtime_error("Runtime_error");
 	}
 	auto copy = new Figure * [_size - 1];
 	/*for (int i = index; i < _size-1; i++) {
@@ -272,6 +274,31 @@ FigureList::~FigureList() {
 	}
 	delete[] figures;
 }
+
 Figure* Figure::create(FigureType type, Point* points) {
 	return new Figure(type, points);
+}
+
+void FigureList::figure_print() {
+	cout << "В массиве сейчас находится " << _size << " фигур \n";
+	for (int i = 0; i < _size; i++) {
+		cout << "Фигура номер " << i + 1 << ".\n" <<
+			"Тип: " << figures[i]->get_type() << ".\n" <<
+			"Площадь: " << (*figures[i]).get_square() << ".\n" <<
+			"Периметр: " << figures[i]->get_perim() << ".\n" <<
+			"Координаты точек:" << endl;
+		if ((figures[i]->get_type() == ellipse) || (figures[i]->get_type() == rectangle)) {
+			for (int j = 0; j < 4; j++) {
+				cout << "(" << figures[i]->get_point('x', j) << ", ";
+				cout << figures[i]->get_point('y', j) << ") ";
+			}
+			cout << "\n" << endl;
+		}
+		else {
+			for (int j = 0; j < 8; j++) {
+				cout << "(" << figures[i]->get_point('x', j) << ", ";
+				cout << figures[i]->get_point('y', j) << ") ";
+			}
+		}
+	}
 }
