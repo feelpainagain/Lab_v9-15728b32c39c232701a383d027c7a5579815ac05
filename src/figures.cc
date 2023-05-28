@@ -120,9 +120,9 @@ float Figure::get_perim() {
 		return perim;
 	case rectangle:
 		Point array1 = { apex[0].x, apex[0].y };
-		Point array2 = { apex[1].x, apex[0].y };
-		Point array3 = { apex[1].x, apex[1].y };
-		Point array4 = { apex[0].x, apex[1].y };
+		Point array2 = { apex[1].x, apex[1].y };
+		Point array3 = { apex[2].x, apex[2].y };
+		Point array4 = { apex[3].x, apex[3].y };
 		perim += array1.p_len(array2);
 		perim += array2.p_len(array3);
 		perim += array3.p_len(array4);
@@ -151,8 +151,8 @@ float Figure::get_square() {
 		return (a + b) / 2 * sqrt(c * c - pow(((a - b) * (a - b) + c * c - d * d) / ((a - b) * 2), 2));
 	case rectangle:
 		Point array1 = { apex[0].x, apex[0].y };
-		Point array2 = { apex[1].x, apex[0].y };
-		Point array3 = { apex[1].x, apex[1].y };
+		Point array2 = { apex[1].x, apex[1].y };
+		Point array3 = { apex[2].x, apex[2].y };
 		int len1 = array1.p_len(array2);
 		int len2 = array2.p_len(array3);
 		return len1*len2;
@@ -295,7 +295,7 @@ void FigureList::figure_print() {
 			cout << "\n" << endl;
 		}
 		else {
-			for (int j = 0; j < 8; j++) {
+			for (int j = 0; j < 4; j++) {
 				cout << "(" << figures[i]->get_point('x', j) << ", ";
 				cout << figures[i]->get_point('y', j) << ") ";
 			}
