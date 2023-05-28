@@ -24,21 +24,28 @@ Figure::Figure() {
 
 Figure::Figure(FigureType type, Point* points) {
 	this->type = type;
-	if (type == rectangle) {
-		this->apex[0] = points[0]; 
-		this->apex[1] = { points[1].x, points[0].y }; 
-		this->apex[2] = { points[1].x, points[1].y }; 
-		this->apex[3] = { points[0].x, points[1].y }; 
-	}
-	else {
-		for (int i = 0; i < 4; i++) {
-			this->apex[i] = points[i];
-		}
+	for (int i = 0; i < 4; i++) {
+		this->apex[i] = points[i];
 	}
 }
 
+//Figure::Figure(FigureType type, Point* points) {
+//	this->type = type;
+//	if (type == rectangle) {
+//		this->apex[0] = points[0]; 
+//		this->apex[1] = { points[1].x, points[0].y }; 
+//		this->apex[2] = { points[1].x, points[1].y }; 
+//		this->apex[3] = { points[0].x, points[1].y }; 
+//	}
+//	else {
+//		for (int i = 0; i < 4; i++) {
+//			this->apex[i] = points[i];
+//		}
+//	}
+//}
 
-void Figure::create_ellipse(float* ellipse_points) {
+
+Figure* Figure::create_ellipse(float* ellipse_points) {
 	this->type = ellipse;
 	apex[0].x = ellipse_points[0];
 	apex[0].y = apex[2].y = ellipse_points[1];
@@ -46,21 +53,24 @@ void Figure::create_ellipse(float* ellipse_points) {
 	apex[1].y = ellipse_points[3];
 	apex[2].x = apex[1].x * 2 - apex[0].x;
 	apex[3].y = apex[0].y * 2 - apex[1].y;
+	return new Figure(type, apex);
 }
-void Figure::create_rectangle(float* rectangle_points) {
+Figure* Figure::create_rectangle(float* rectangle_points) {
 	type = rectangle;
 	apex[0].x = apex[3].x = rectangle_points[0];
 	apex[0].y = apex[1].y = rectangle_points[1];
 	apex[1].x = apex[2].x = rectangle_points[2];
 	apex[2].y = apex[3].y = rectangle_points[3];
+	return new Figure(type, apex);
 }
-void Figure::create_trapezoid(float* trapezoid_points) {
+Figure* Figure::create_trapezoid(float* trapezoid_points) {
 	type = trapezoid;
 	for (int i = 0, j = 0; i < 4; ++i) {
 		apex[i].x = trapezoid_points[j];
 		apex[i].y = trapezoid_points[j + 1];
 		j += 2;
 	}
+	return new Figure(type, apex);
 }
 
 bool Figure::operator== (const Figure figure) const { 
@@ -109,10 +119,18 @@ float Figure::get_perim() {
 		perim += this->apex[3].p_len(this->apex[0]);
 		return perim;
 	case rectangle:
-		for (int i = 0; i < 3; i++) {
-			perim += this->apex[i].p_len(this->apex[i + 1]);
-		}
-		perim += this->apex[3].p_len(this->apex[0]);
+		Point array1 = { apex[0].x, apex[0].y };
+		Point array2 = { apex[1].x, apex[0].y };
+		Point array3 = { apex[1].x, apex[1].y };
+		Point array4 = { apex[0].x, apex[1].y };
+		perim += array1.p_len(array2);
+		perim += array2.p_len(array3);
+		perim += array3.p_len(array4);
+		perim += array4.p_len(array1);
+		//for (int i = 0; i < 3; i++) {
+		//	perim += this->apex[i].p_len(this->apex[i + 1]);
+		//}
+		//perim += this->apex[3].p_len(this->apex[0]);
 		return perim;
 	}
 }
@@ -132,7 +150,12 @@ float Figure::get_square() {
 		c = this->apex[0].p_len(this->apex[3]);
 		return (a + b) / 2 * sqrt(c * c - pow(((a - b) * (a - b) + c * c - d * d) / ((a - b) * 2), 2));
 	case rectangle:
-		return apex[0].p_len(apex[1]) * apex[0].p_len(apex[3]);
+		Point array1 = { apex[0].x, apex[0].y };
+		Point array2 = { apex[1].x, apex[0].y };
+		Point array3 = { apex[1].x, apex[1].y };
+		int len1 = array1.p_len(array2);
+		int len2 = array2.p_len(array3);;
+		return len1*len2;
 	}
 }
 
@@ -158,67 +181,97 @@ void Figure::set_min_framing_rectangle(Figure figure) {
 	}
 }
 
-
-
-Figure FigureList::operator[](const int index) const{ 
-	if ((index < 0) || (capacity <= index)) {
+Figure* FigureList::operator[](const int index) const {
+	if ((index < 0) || (_size <= index)) {
 		throw out_of_range("[FigureList::operator[]] Index is out of range.");
 	}
 	return figures[index];
 }
 
-int FigureList::get_count() {
-	return count;
+int FigureList::get_size() {
+	return _size;
 }
 
-Figure FigureList::indexed_get(int index) {
-	if ((index < 0) || (capacity <= index)) {
-		throw out_of_range("[FigureList::operator[]] Index is out of range.");
+Figure* FigureList::indexed_get(int index) {
+	if ((index < 0) || (_size <= index)) {
+		throw 0;
 	}
 	return this->figures[index];
 }
 
-void FigureList::figure_add(Figure figure) {
-	if (count+1>=capacity) {
-		throw out_of_range("[FigureList::operator[]] Array is full.");
+void FigureList::figure_add(Figure* figure) {
+	auto copy = new Figure * [_size + 1];
+	for (int i = 0; i < _size; ++i) {
+		copy[i] = figures[i];
 	}
-	Figure void_figure;
-	this->figures[count] = figure;
-	this->count++;
+	copy[_size] = figure;
+	delete[] figures;
+	figures = copy;
+	this->_size++;
 }
 
-void FigureList::figure_insert(Figure figure, int index) {
-	if ((index < 0) || (index>count)) {
+void FigureList::figure_insert(Figure* figure, int index) {
+	if ((index < 0) || (_size < index)) {
 		throw out_of_range("[FigureList::operator[]] Index is out of range.");
 	}
-	if (count + 1 > capacity) {
-		throw out_of_range("Array is full");
+	auto copy = new Figure * [_size + 1];
+	for (int i = 0; i < _size; i++) {
+		if (i < index)
+			copy[i] = figures[i];
+		else
+			copy[i + 1] = figures[i];
 	}
-	for (int i = count; i > index; i--) {
-		this->figures[i] = this->figures[i - 1];
-	}
-	this->figures[index] = figure;
-	this->count++;
+	copy[index] = figure;
+	delete[] figures;
+	figures = copy;
+	this->_size++;
 }
 
 void FigureList::indexed_delete(int index) {
-	if ((index < 0) || (index > count)) {
-		throw out_of_range("[FigureList::operator[]] Index is out of range.");
+	if ((index < 0) || (index > _size)) {
+		throw runtime_error("Runtime_error_Kosenko");
 	}
-	for (int i = index; i < count; i++) {
-		this->figures[i] = this->figures[i+1];
+	auto copy = new Figure * [_size - 1];
+	/*for (int i = index; i < _size-1; i++) {
+			figures[i] = figures[i + 1];
 	}
-	this->count--;
+	for (int i = index; i < _size - 1; i++) {
+		copy[i] = figures[i];
+	}*/
+	for (int i = 0; i < _size - 1; ++i) {
+		if (index > i)
+			copy[i] = figures[i];
+		else
+			copy[i] = figures[i + 1];
+	}
+	delete[] figures;
+	figures = copy;
+	this->_size--;
 }
 
 Figure FigureList::max_square_search() {
-	if (count == 0) {
-		throw out_of_range("[FigureList is empty");
+	if (_size == 0) {
+		throw 0;
 	}
-	Figure result_figure;
-	for (int i = 0; i < count; i++) {
-		if (result_figure.get_square() < this->figures[i].get_square())
-			result_figure = this->figures[i];
+	Figure result_figure(*figures[0]);
+	for (int i = 0; i < _size; i++) {
+		if (result_figure.get_square() < (*figures[i]).get_square())
+			result_figure = *figures[i];
 	}
 	return result_figure;
+}
+
+FigureList::FigureList() {
+	figures = new Figure * [0];
+	_size = 0;
+}
+
+FigureList::~FigureList() {
+	for (int i = 0; i < _size; ++i) {
+		delete figures[i];
+	}
+	delete[] figures;
+}
+Figure* Figure::create(FigureType type, Point* points) {
+	return new Figure(type, points);
 }

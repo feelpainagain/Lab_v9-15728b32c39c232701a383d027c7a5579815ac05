@@ -18,9 +18,10 @@ namespace kos {
 	public:
 		Figure(); 
 		Figure(FigureType type, Point* points); 
-		void create_ellipse(float* ellipse_points); 
-		void create_rectangle(float* rectangle_points);
-		void create_trapezoid(float* trapezoid_points);
+		Figure* create(FigureType type, Point* points);
+		Figure* create_ellipse(float* ellipse_points);
+		Figure* create_rectangle(float* rectangle_points);
+		Figure* create_trapezoid(float* trapezoid_points);
 		bool operator== (const Figure figure) const;
 		FigureType get_type();
 		float get_point(char a, int i);
@@ -32,15 +33,18 @@ namespace kos {
 	};
 	class FigureList { 
 	private:
-		const static int capacity = 3; 
-		Figure figures[capacity]; 
-		int count = 0; //???
+		//const static int capacity = 3; 
+		Figure** figures;
+		//int count = 0;
+		int _size = 0;
 	public:
-		Figure operator[](const int index) const; //индексатор
-		void figure_add(Figure figure);
-		Figure indexed_get(int index);
-		int get_count();
-		void figure_insert(Figure figure, int index);
+		FigureList();
+		~FigureList();
+		Figure* operator[](const int index) const; //индексатор
+		void figure_add(Figure* figure);
+		Figure* indexed_get(int index);
+		int get_size();
+		void figure_insert(Figure* figure, int index);
 		void indexed_delete(int index);
 		Figure max_square_search();
 	};
