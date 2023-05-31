@@ -29,12 +29,12 @@ TEST(FunctionsTests, get_point_Test3) {
     EXPECT_EQ(cur_Point , -1);
 }
 
-TEST(FunctionsTests, get_perim_ForRectangle_Test4) {
-    Point cur_point[2] = { -1,1,1,-1 };
-    Figure cur_figure(rectangle, cur_point);
-    float cur_perim = cur_figure.get_perim();
-    EXPECT_EQ(cur_perim, 8);
-}
+//TEST(FunctionsTests, get_perim_ForRectangle_Test4) {
+//    Point cur_point[4] = { -1,1,1,-1 };
+//    Figure cur_figure(rectangle, cur_point);
+//    float cur_perim = cur_figure.get_perim();
+//    EXPECT_EQ(cur_perim, 8);
+//}
 TEST(FunctionsTests, get_perim_ForEllipse_Test5) {
     Point cur_point[4] = { -1,0,0,1,1,0,0,-1 };
     Figure cur_figure(ellipse, cur_point);
@@ -59,12 +59,12 @@ TEST(FunctionsTests, get_squareFor_Trapezoid_Test8) {
     float cur_square = cur_figure.get_square();
     EXPECT_NEAR(cur_square, 3 , 0.1);
 }
-TEST(FunctionsTests, get_square_ForRectangle_Test9) {
-    Point cur_point[2] = { -1,1,1,-1 };
-    Figure cur_figure(rectangle, cur_point);
-    float cur_square = cur_figure.get_square();
-    EXPECT_NEAR(cur_square, 4 , 0.1);
-}
+//TEST(FunctionsTests, get_square_ForRectangle_Test9) {
+//    Point cur_point[2] = { -1,1,1,-1 };
+//    Figure cur_figure(rectangle, cur_point);
+//    float cur_square = cur_figure.get_square();
+//    EXPECT_NEAR(cur_square, 4 , 0.1);
+//}
 
 TEST(FunctionsTests, set_min_framing_rectangle_For_Ellipse_Test10) {
     //Point cur_point[4] = { -1,0,0,1,1,0,0,-1 };

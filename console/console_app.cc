@@ -21,7 +21,8 @@ int main() {
 			"2. Удалить элемент из списка по указанному индексу\n" <<
 			"3. Вывести список на экран\n" <<
 			"4. Найти в списке первую фигуру с максимальной площадью\n" << 
-			"5. Выход из программы\n" << endl;
+			"5. Добавить фигуру.\n" <<
+			"6. Выход из программы\n" << endl;
 		cout << "Ваш выбор: ";
 		cin >> choise;
 		switch (choise)
@@ -92,7 +93,37 @@ int main() {
 			cout << "Самая большая площадь " << figure.get_square() << "\n";
 			system("pause");
 			break;
+
 		case 5:
+			system("cls");
+			cout << "5. Вставить фигуру.\n" << endl;
+			cout << "Выберите тип фигуры (1 - эллипс, 2 - трапеция, 3 - прямоугольник): ";
+			cin >> temp;
+			if (temp == 1) {
+				cout << "\nВведите поочерёдно координаты x и y для каждой точки: " << endl;
+				for (int i = 0; i < 4; ++i)
+					cin >> points[i];
+				figure_list.figure_add(figure.create_ellipse(points));
+			}
+			else if (temp == 2) {
+				cout << "\nВведите поочерёдно координаты x и y для каждой точки: " << endl;
+				for (int i = 0; i < 8; ++i)
+					cin >> points[i];
+				figure_list.figure_add(figure.create_trapezoid(points));
+			}
+			else if (temp == 3) {
+				cout << "\nВведите поочерёдно координаты x и y для каждой точки: " << endl;
+				for (int i = 0; i < 4; ++i)
+					cin >> points[i];
+				figure_list.figure_add(figure.create_rectangle(points));
+			}
+			else
+				cout << "Вы выбрали неверный тип фигуры";
+			cout << "Вы успешно добавили фигуру. \n";
+			system("pause");
+			break;
+
+		case 6:
 			system("cls");
 			cout << "Завершение работы.";
 			return(false);
