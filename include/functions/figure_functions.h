@@ -1,50 +1,96 @@
 #pragma once
 
+#include<vector>
+#include<memory>
+#include<iostream>
+
+using namespace std;
+
 namespace kos { 
-	enum FigureType { 
-		ellipse,
-		trapezoid,
-		rectangle
-	};
+
+	class Figure;
+
+	using FigurePtr = std::shared_ptr<Figure>;
+
 	struct Point { 
 		float x;
 		float y;
 		float p_len(Point point); 
 	};
+
 	class Figure { 
+	protected:
+		Figure() = default;
 	private:
-		FigureType type; 
-		Point apex[4]; 
 	public:
-		Figure(); 
-		Figure(FigureType type, Point* points); 
-		Figure* create(FigureType type, Point* points); //new
-		Figure* create_ellipse(float* ellipse_points);
-		Figure* create_rectangle(float* rectangle_points);
-		Figure* create_trapezoid(float* trapezoid_points);
-		bool operator== (const Figure figure) const;
-		FigureType get_type();
-		float get_point(char a, int i);
-		void set_type(FigureType Type);
-		void set_apex(Point* apex);
-		float get_perim();
-		float get_square();
-		void set_min_framing_rectangle(Figure figure);
+		Point apex[4];
+		bool operator== (const Figure& figure);
+		Point* get_point();
+		float virtual get_perim() = 0;
+		float virtual get_square() = 0;
+		void virtual set_min_framing_rectangle(Point* points) = 0;
+		bool virtual check_figure() = 0;
+		void virtual print();
+		virtual unique_ptr<Figure> clone() const = 0;
+		virtual ~Figure() = default;
 	};
+
+	class Ellipse: public Figure {
+	public:
+		Ellipse();
+		Ellipse(Point* points);
+		float get_perim() override;
+		float get_square() override;
+		void set_min_framing_rectangle(Point* points) override;
+		bool check_figure() override;
+		void print() override;
+		unique_ptr<Figure> clone() const override;
+	};
+
+	class Trapezoid : public Figure {
+	public:
+		Trapezoid();
+		Trapezoid(Point* points);
+		float get_perim() override;
+		float get_square() override;
+		void set_min_framing_rectangle(Point* points) override;
+		bool check_figure() override;
+		void print() override;
+		unique_ptr<Figure> clone() const override;
+	};
+
+	class Rectangle : public Figure {
+	public:
+		Rectangle();
+		Rectangle(Point* points);
+		float get_perim() override;
+		float get_square() override;
+		void set_min_framing_rectangle(Point* points) override;
+		bool check_figure() override;
+		void print() override;
+		unique_ptr<Figure> clone() const override;
+	};
+
 	class FigureList { 
 	private:
-		Figure** figures; //new
-		int _size = 0; //new
+		vector<FigurePtr> figure_list;
 	public:
-		FigureList();
-		~FigureList(); //new
-		Figure* operator[](const int index) const;
-		void figure_add(Figure* figure);
-		Figure* indexed_get(int index);
-		int get_size();
-		void figure_insert(Figure* figure, int index);
+
+		FigureList() = default;
+		FigureList(const FigureList& OtherList);
+
+		void swap(FigureList& OtherList) noexcept;
+
+		FigurePtr operator[](const int index) const;
+		FigureList& operator=(FigureList list);
+
+		int size();
+
+		void figure_add(FigurePtr figure);
+		void figure_insert(FigurePtr a, int index);
 		void indexed_delete(int index);
-		Figure max_square_search();
-		void figure_print(); //new
+		Figure& max_square_search();
+		void print();
+
 	};
 }
